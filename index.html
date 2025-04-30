@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaCast - Intelligent Weather Forecasting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2110&q=80') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            margin-top: 70px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Weather Display Section */
+        .weather-display {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .weather-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .weather-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .weather-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .weather-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .temp {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .location {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .detail {
+            text-align: center;
+        }
+        
+        .detail i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        /* Chatbot Section */
+        .chatbot-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .chatbot-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .chatbot-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .chatbot-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .chatbot-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .chatbot-info h3 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .chatbot-info p {
+            margin-bottom: 30px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>ClimaCast</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#weather">Weather</a></li>
+                    <li><a href="#chatbot">Chatbot</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+                <a href="#" class="btn">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Smart Weather Forecasting</h1>
+            <p>Get accurate, AI-powered weather predictions with our intuitive chatbot interface. Plan your day with confidence using ClimaCast's advanced forecasting technology.</p>
+            <a href="#chatbot" class="btn">Try Our Chatbot</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose ClimaCast?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI-Powered</h3>
+                    <p>Our advanced algorithms analyze multiple data sources to provide the most accurate forecasts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Chat Interface</h3>
+                    <p>Get weather information naturally through conversation with our intelligent chatbot.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Real-Time Alerts</h3>
+                    <p>Receive instant notifications about severe weather conditions in your area.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather Display Section -->
+    <section class="weather-display" id="weather">
+        <div class="container">
+            <div class="section-title">
+                <h2>Current Weather</h2>
+            </div>
+            <div class="weather-container">
+                <div class="weather-card">
+                    <div class="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="temp">24°C</div>
+                    <div class="location">New York, NY</div>
+                    <div class="description">Sunny</div>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <i class="fas fa-wind"></i>
+                            <div>12 km/h</div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-tint"></i>
+                            <div>45%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud-rain"></i>
+                    </div>
+                    <div class="temp">18°C</div>
+                    <div class="location">London, UK</div>
+                    <div class="description">Light Rain</div>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <i class="fas fa-wind"></i>
+                            <div>8 km/h</div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-tint"></i>
+                            <div>85%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="temp">22°C</div>
+                    <div class="location">Tokyo, Japan</div>
+                    <div class="description">Partly Cloudy</div>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <i class="fas fa-wind"></i>
+                            <div>5 km/h</div>
+                        </div>
+                        <div class="detail">
+                            <i class="fas fa-tint"></i>
+                            <div>60%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section class="chatbot-section" id="chatbot">
+        <div class="container">
+            <div class="section-title">
+                <h2>Interactive Weather Assistant</h2>
+            </div>
+            <div class="chatbot-container">
+                <div class="chatbot-image">
+                    <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Chatbot Interface">
+                </div>
+                <div class="chatbot-info">
+                    <h3>Talk to Our Weather Bot</h3>
+                    <p>Our intelligent chatbot makes getting weather information as easy as having a conversation. Ask natural questions like "Do I need an umbrella today?" or "What's the weather like in Paris this weekend?" and get instant, accurate responses.</p>
+                    <p>The chatbot learns your preferences over time to provide personalized weather updates and recommendations.</p>
+                    <a href="#" class="btn">Launch Chatbot</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ClimaCast</h3>
+                    <p>Revolutionizing weather forecasting with AI and natural language processing to make weather information more accessible and intuitive.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#weather">Weather</a></li>
+                        <li><a href="#chatbot">Chatbot</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 ClimaCast. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+      intent="WELCOME"
+      chat-title="ClimaCast"
+      agent-id="9e6f4e09-e865-4b80-af5b-386c041ab0a4"
+      language-code="en"
+    ></df-messenger>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
